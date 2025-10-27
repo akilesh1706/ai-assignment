@@ -26,7 +26,16 @@ def sample_problem():
         Course("PH101","T3", ["G2"], 25),
         Course("CS102","T1", ["G3"], 35),
         Course("EE101","T2", ["G3","G1"], 45),
-        Course("HS101","T4", ["G2"], 20)
+        Course("HS101","T4", ["G2"], 20),
+        Course("ME201","T5", ["G1","G3"], 50),
+        Course("CH201","T6", ["G2","G3"], 40),
+        Course("CS201","T1", ["G1"], 30),
+        Course("MA201","T2", ["G2"], 35),
+        Course("PH201","T3", ["G3"], 25),
+        Course("EE201","T2", ["G1","G2"], 45),
+        Course("CS301","T1", ["G2","G3"], 40),
+        Course("HS201","T4", ["G1"], 20),
+        Course("ME301","T5", ["G3"], 50)
     ]
     timeslots = ["Mon_9","Mon_11","Tue_9","Tue_11","Wed_9"]
     rooms = [Room("R1",50), Room("R2",40), Room("R3",30)]
@@ -104,7 +113,7 @@ def backtrack_search(courses, domains_init, forward_checking=False, time_limit_m
     start = time.perf_counter()
     course_ids = [c.id for c in courses]
     courses_by_id = {c.id:c for c in courses}
-    domains = {k:list(v) for k,v in domains_init.items()}  # copy
+    domains = {k:list(v) for k,v in domains_init.items()}
     assignment = {}
     backtracks = 0
     tries = 0
@@ -142,7 +151,7 @@ def backtrack_search(courses, domains_init, forward_checking=False, time_limit_m
                     if other == var: continue
                     newdom = []
                     for ov in domains[other]:
-                        if not violates({**assignment}, courses_by_id, other, ov):  # using new assignment
+                        if not violates({**assignment}, courses_by_id, other, ov):
                             newdom.append(ov)
                     domains[other] = newdom
                     if len(newdom) == 0:
@@ -151,9 +160,8 @@ def backtrack_search(courses, domains_init, forward_checking=False, time_limit_m
             if not failure:
                 if recurse():
                     return True
-            # undo
             if forward_checking and domains_backup is not None:
-                domains = domains_backup  # but careful: this rebinding won't affect outer domains — so do differently
+                domains = domains_backup
                 # To handle reliably, we'll mutate back:
                 for k in domains_backup:
                     domains[k] = domains_backup[k]
@@ -161,10 +169,6 @@ def backtrack_search(courses, domains_init, forward_checking=False, time_limit_m
         backtracks += 1
         return False
 
-    # Slight change to avoid rebinding domains inside nested scope: use list-of-keys mutation strategy
-    # Re-implement with explicit stack-based recursion to allow safe domain restore
-
-    # Rewriting robust recursive search with explicit restore:
     assignment.clear()
     domains = {k:list(v) for k,v in domains_init.items()}
     backtracks = 0

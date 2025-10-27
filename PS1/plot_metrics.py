@@ -38,7 +38,7 @@ def render_and_print_ascii(file_path, save_png=True):
             plt.figure(figsize=(7,7))
             plt.imshow(arr, cmap=cmap, norm=norm, origin='upper', interpolation='none')
 
-            # ✅ Add visible borders around each grid cell
+            # Add visible borders around each grid cell
             plt.grid(which='major', color='gray', linewidth=0.5)
             plt.xticks(np.arange(-0.5, w, 1))
             plt.yticks(np.arange(-0.5, h, 1))

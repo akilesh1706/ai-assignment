@@ -164,7 +164,7 @@ def run_experiments(runs, rows, cols, obs_prob, seed, out_csv):
                     "time_ms": res["time_ms"]
                 })
 
-    print("✅ Done. Metrics saved & ASCII visualization written.")
+    print("Done. Metrics saved & ASCII visualization written.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
